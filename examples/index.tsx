@@ -1,7 +1,6 @@
 import { tree } from 'virtual:layout-menu';
 import type { PathTreeNode } from 'scripts/tree';
 
-console.log('tree', tree);
 const renderMenu = (tree: PathTreeNode) => {
   try {
     return [tree].map(node => {
@@ -10,18 +9,21 @@ const renderMenu = (tree: PathTreeNode) => {
       if (currentNode.children.length) {
         return (
           <li key={key}>
-            <span
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                location.href = node.parent + node.path.split('.')[0];
-              }}
-            >{currentNode.path}</span>
+            <span>{currentNode.path}</span>
             <br />
             <ul style={{ padding: '0 10px' }} key={`${currentNode.level}-ul`}>{currentNode.children.map(renderMenu)}</ul>
           </li>
         )
       }
-      return <li style={{ display: 'flex' }} key={key}>{currentNode.path}</li>;
+      return (
+        <li
+          style={{ display: 'flex', cursor: 'pointer' }}
+          onClick={() => {
+            location.href = node.parent + node.path.split('.')[0];
+          }}
+          key={key}
+        >{currentNode.path}</li>
+      );
     })
   } catch (e) { }
 }
