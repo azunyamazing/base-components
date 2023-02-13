@@ -44,17 +44,19 @@ const createViteServer = async () => {
     } else {
       const { middlewares, transformIndexHtml } = await createViteServer();
 
-      middlewares(req, res, async () => {
-        if (routeMap.has(route)) {
-          // 处理直出的模板
-          const resultTemplate = (await transformIndexHtml(route, template))
-            .replace('<!-- __APP_SCRIPT__ -->', `<script type="module" src="${routeMap.get(route)}"></script>`);
+      if (routeMap.has(route)) {
+        // 处理直出的模板
+        const resultTemplate = (await transformIndexHtml(route, template))
+          .replace('<!-- __COMPONET_SCRIPT__ -->', `<script type="module" src="${routeMap.get(route)}"></script>`);
 
-          res.setHeader('content-type', 'text/html');
-          res.write(resultTemplate);
-          res.end();
-          return;
-        }
+        res.setHeader('content-type', 'text/html');
+        res.setHeader('cache-control', 'no-cache');
+        res.write(resultTemplate);
+        res.end();
+        return;
+      }
+
+      middlewares(req, res, async () => {
         res.write('CANNOT FOUND PAGE');
         res.end();
       });
