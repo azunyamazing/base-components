@@ -19,7 +19,7 @@ const renderMenu = (tree: PathTreeNode) => {
         <li
           style={{ display: 'flex', cursor: 'pointer' }}
           onClick={() => {
-            location.href = node.parent + node.path.split('.')[0];
+            location.href = `${node.parent}/${node.path.split('.')[0]}`;
           }}
           key={key}
         >{currentNode.path}</li>
