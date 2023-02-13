@@ -26,7 +26,7 @@ export const path2Tree = (dirPath: string) => {
 
   const result: PathTreeNode = {
     level: 1,
-    parent: '/',
+    parent: process.cwd(),
     path: dirPath,
     children: [],
   }
