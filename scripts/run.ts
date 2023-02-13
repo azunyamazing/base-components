@@ -2,8 +2,7 @@ import chalk from "chalk";
 import vite from 'vite';
 import { readFileSync } from "fs";
 import { createServer } from "http";
-import { resolve } from "path";
-import { getRoutes } from './route';
+import { getRoute, getRoutes } from './route';
 
 import type { ViteDevServer } from 'vite';
 
@@ -33,11 +32,12 @@ const createViteServer = async () => {
 };
 
 (async () => {
-  const routeMap = getRoutes(resolve(process.cwd(), 'examples'));
+  const routeMap = getRoutes();
   const template = readFileSync('index.html', 'utf-8');
 
   const app = createServer(async (req, res) => {
-    const route = req.url;
+    const url = req.url;
+    const route = getRoute(url);
 
     if (isProd) {
       // TODO: production code
@@ -46,7 +46,7 @@ const createViteServer = async () => {
 
       if (routeMap.has(route)) {
         // 处理直出的模板
-        const resultTemplate = (await transformIndexHtml(route, template))
+        const resultTemplate = (await transformIndexHtml(url, template))
           .replace('<!-- __COMPONET_SCRIPT__ -->', `<script type="module" src="${routeMap.get(route)}"></script>`);
 
         res.setHeader('content-type', 'text/html');

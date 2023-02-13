@@ -1,7 +1,6 @@
 import { readdirSync, statSync } from 'fs-extra';
 import { join } from 'path';
 
-
 export const getFileStat = (path: string) => {
   try {
     return statSync(path);

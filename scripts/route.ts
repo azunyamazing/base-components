@@ -1,15 +1,11 @@
-import { readdirSync, statSync } from "fs-extra";
-import { join, parse } from "path";
+import { readdirSync } from "fs-extra";
+import { dirname, join, parse, resolve } from "path";
+import { getFileStat } from './tree';
 
-const getFileStat = (path: string) => {
-  try {
-    return statSync(path);
-  }catch(e) {
-    return null;
-  }
-}
+// 以 examples 建立路由系统
+const ROOT_PATH = resolve(process.cwd(), 'examples');
 
-// 根据 paths 获取所有是文件的路径
+// 递归获取所有是文件的路径
 export const getFilesFromPaths = (paths: string[]): string[] => {
   const result: string[] = [];
   try {
@@ -28,7 +24,7 @@ export const getFilesFromPaths = (paths: string[]): string[] => {
 }
 
 // 根据文件路径快速建立路由
-export const getRoutes = (dirPath: string) => {
+export const getRoutes = (dirPath: string = ROOT_PATH) => {
   const routeMap = new Map();
   const routeFiles = getFilesFromPaths([dirPath]);
   routeFiles.forEach(filename => {
@@ -39,4 +35,12 @@ export const getRoutes = (dirPath: string) => {
     routeMap.set(route, filename.replace(process.cwd(), ''));
   })
   return routeMap;
+}
+
+// 根据访问 url 匹配路由
+export const getRoute = (pathname: string) => {
+  if (pathname.endsWith('index')) {
+    return dirname(pathname);
+  }
+  return pathname;
 }
