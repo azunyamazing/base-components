@@ -32,7 +32,6 @@ const createViteServer = async () => {
   return viteServer;
 };
 
-
 (async () => {
   const routeMap = getRoutes(resolve(process.cwd(), 'examples'));
   const template = readFileSync('index.html', 'utf-8');
@@ -55,6 +54,8 @@ const createViteServer = async () => {
           res.write(resultTemplate);
           res.end();
         }
+        res.write('CANNOT FOUND PAGE');
+        res.end();
       });
 
       app.on('close', () => {
