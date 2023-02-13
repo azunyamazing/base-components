@@ -9,6 +9,7 @@ const getFileStat = (path: string) => {
   }
 }
 
+// 根据 paths 获取所有是文件的路径
 export const getFilesFromPaths = (paths: string[]): string[] => {
   const result: string[] = [];
   try {

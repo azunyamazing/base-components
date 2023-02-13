@@ -53,17 +53,20 @@ const createViteServer = async () => {
           res.setHeader('content-type', 'text/html');
           res.write(resultTemplate);
           res.end();
+          return;
         }
         res.write('CANNOT FOUND PAGE');
         res.end();
       });
-
-      app.on('close', () => {
-        viteServer.close();
-        viteServer = null;
-      })
     }
   });
+
+  app.on('close', () => {
+    if (viteServer) {
+      viteServer.close();
+      viteServer = null;
+    }
+  })
 
   app.listen(2333, () => {
     console.log(`\n ${chalk.cyan('-')} Local: ${chalk.greenBright(`http://localhost:2333`)}`);
