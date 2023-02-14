@@ -39,6 +39,13 @@ const createViteServer = async () => {
     const url = req.url;
     const route = getRoute(url);
 
+    // 默认路由进入 examples 页面
+    if (url === '/') {
+      res.writeHead(302, {'Location': '/examples'});
+      res.end();
+      return;
+    }
+
     if (isProd) {
       // TODO: production code
     } else {
@@ -46,8 +53,8 @@ const createViteServer = async () => {
 
       if (routeMap.has(route)) {
         // 处理直出的模板
-        const resultTemplate = (await transformIndexHtml(url, template))
-          .replace('<!-- __COMPONET_SCRIPT__ -->', `<script type="module" src="${routeMap.get(route)}"></script>`);
+        const replacement = route === '/examples' ? '' : `<script type="module" src="${routeMap.get(route)}"></script>`;
+        const resultTemplate = (await transformIndexHtml(url, template)).replace('<!-- __COMPONET_SCRIPT__ -->', replacement);
 
         res.setHeader('content-type', 'text/html');
         res.setHeader('cache-control', 'no-cache');
@@ -59,6 +66,7 @@ const createViteServer = async () => {
       middlewares(req, res, async () => {
         res.write('CANNOT FOUND PAGE');
         res.end();
+        return;
       });
     }
   });

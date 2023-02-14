@@ -4,7 +4,7 @@ import type { PathTreeNode } from 'scripts/tree';
 const renderMenu = (tree: PathTreeNode) => {
   try {
     return [tree].map(node => {
-      const currentNode = node as unknown as PathTreeNode;
+      const currentNode = node;
       const key = `${currentNode.level}-${currentNode.path}`;
       if (currentNode.children.length) {
         return (
