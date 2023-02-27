@@ -24,6 +24,7 @@ const createViteServer = async () => {
         usePolling: true,
         interval: 100,
       },
+      hmr: true,
     },
     appType: 'custom',
   })

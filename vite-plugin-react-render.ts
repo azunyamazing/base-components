@@ -10,7 +10,7 @@ export const renderAppPlugin = (): PluginOption => {
           import { createRoot } from 'react-dom/client';
           let app = undefined;
           ${src}
-          if (!window.appLoaded) {
+          if (!window.appLoaded || !app) {
             app = createRoot(document.getElementById('app'));
             window.appLoaded = true;
           }
@@ -26,7 +26,7 @@ export const renderAppPlugin = (): PluginOption => {
           import { createRoot } from 'react-dom/client';
           let component = undefined;
           ${src}
-          if (!window.componentLoaded) {
+          if (!window.componentLoaded || !component) {
             component = createRoot(document.getElementById('component'));
             window.componentLoaded = true;
           }
