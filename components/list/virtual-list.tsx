@@ -82,7 +82,7 @@ export const VirtualList = <D extends any>(props: VirtualListProps<D>) => {
         const top = (start + i) * itemHeight + 'px';
 
         return (
-          <div key={d.key} ref={ref} id={id} style={{ position: 'absolute', backgroundColor: 'pink', width: '100%', height: itemHeight, top }} {...rest}>{value ?? render?.(d)}</div>
+          <div key={d.key} ref={ref} id={id} style={{ position: 'absolute', backgroundColor: 'pink', width: '100%', height: `${itemHeight}px`, top }} {...rest}>{value ?? render?.(d)}</div>
         )
       })}
     </div>
