@@ -1,6 +1,6 @@
-### react-components
+### base-components
 
-:santa: 实现自己想写的一些 react 公共组件
+:santa: 实现一些有挑战性/尝试性的组件
 
 #### RUN
 
