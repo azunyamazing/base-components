@@ -1,5 +1,5 @@
 import { readdirSync } from "fs-extra";
-import { dirname, join, parse, resolve } from "path";
+import { dirname, join, parse, resolve, sep } from "path";
 import { getFileStat } from './tree';
 
 // 以 examples 建立路由系统
@@ -23,6 +23,11 @@ export const getFilesFromPaths = (paths: string[]): string[] => {
   return result;
 }
 
+// 统一 window & mac 路径符号
+export const replacePathsep = (path: string) => {
+  return path.split(sep).join('/');
+}
+
 // 根据文件路径快速建立路由
 export const getRoutes = (dirPath: string = ROOT_PATH) => {
   const routeMap = new Map();
@@ -31,8 +36,10 @@ export const getRoutes = (dirPath: string = ROOT_PATH) => {
     const { dir, name } = parse(filename);
     const relativePath = dir.replace(process.cwd(), '');
     const basePathname = name === 'index' ? '' : name;
-    const route = join(relativePath, basePathname);
-    routeMap.set(route, filename.replace(process.cwd(), ''));
+
+    const route = replacePathsep(join(relativePath, basePathname));
+    const value =replacePathsep(filename.replace(process.cwd(), ''));
+    routeMap.set(route, value);
   })
   return routeMap;
 }

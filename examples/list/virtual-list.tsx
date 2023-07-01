@@ -1,5 +1,5 @@
-import { VirtualList } from "@/components/list/virtual-list"
-import type { DataType } from "@/components/list/virtual-list"
+import { VirtualList } from "../../src/components/list/virtual-list"
+import type { DataType } from "../../src/components/list/virtual-list"
 
 interface Data {
   title: number;

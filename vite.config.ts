@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import vue from '@vitejs/plugin-vue';
 
-import { virtualTreePlugin } from './vite-plugin-react-virtual';
-import { renderAppPlugin } from './vite-plugin-react-render';
+import { menuPlugin } from './vite-plugin-menu';
+import { fileRoutesPlugin } from './vite-plugin-routes';
 
 
 export default defineConfig({
@@ -10,10 +11,13 @@ export default defineConfig({
     emptyOutDir: true,
     outDir: 'dist',
   },
-  plugins: [virtualTreePlugin(), renderAppPlugin(), react()],
+  plugins: [menuPlugin(), fileRoutesPlugin(), vue(), react()],
   resolve: {
     alias: {
-      '@': '.'
-    }
+      '@': './src'
+    },
+    extensions: ['.ts', '.json', '.tsx', '.vue']
   }
 })
+
+export { }

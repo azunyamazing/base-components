@@ -3,21 +3,31 @@
     "rootDir": ".",
     "baseUrl": ".",
     "strictNullChecks": false,
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "ESNext",
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
+    // "jsxImportSource": "vue",
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "verbatimModuleSyntax": true,
     "target": "es6",
-    "lib": ["dom", "es2017"],
+    "lib": [
+      "dom",
+      "es2017"
+    ],
     "skipLibCheck": true,
     "stripInternal": true,
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "isolatedModules": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -16,9 +16,18 @@
   }
 </style>
 <body>
-  <div id="app"></div>
-  <div id="component" style="padding: 10px;"></div>
-  <script type="module" src="/examples/index.tsx"></script>
-  <!-- __COMPONET_SCRIPT__ -->
+  <script>
+    try {
+      window.globalState = __GLOBAL_STATE__;
+    } catch(e) {
+      window.globalState = {}
+    }
+  </script>
+
+  <div style="display: flex;">
+    <div id="menu"></div>
+    <div id='component' style="padding: 10px;">1</div>
+  </div>
+  <script type="module" src="./src/main.tsx"></script>
 </body>
 </html>

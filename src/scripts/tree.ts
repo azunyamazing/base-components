@@ -1,5 +1,6 @@
 import { readdirSync, statSync } from 'fs-extra';
-import { join } from 'path';
+import { join, relative } from 'path';
+import { replacePathsep } from './route';
 
 export const getFileStat = (path: string) => {
   try {
@@ -25,7 +26,7 @@ export const path2Tree = (dirPath: string) => {
 
   const result: PathTreeNode = {
     level: 1,
-    parent: process.cwd(),
+    parent: null,
     path: dirPath,
     children: [],
   }
@@ -40,7 +41,7 @@ export const path2Tree = (dirPath: string) => {
       const newNode: PathTreeNode = {
         level: node.level + 1,
         parent: node.path,
-        path: join(node.path, path),
+        path: `${node.path}/${path}`,
         children: [],
       }
       node.children.push(newNode);
