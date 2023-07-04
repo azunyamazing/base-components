@@ -90,8 +90,6 @@ watchEffect(() => {
       echartInstance.value.setOption({ graphic });
     }
 
-    echartInstance.value.resize();
-
     // 数据集更新重新注册
     registerSelecto({
       echartId,
@@ -127,5 +125,4 @@ onUnmounted(() => {
 })
 
 defineExpose({ echartInstance });
-
 </script>
