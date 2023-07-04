@@ -20,7 +20,6 @@ export interface Selections {
 export type OnSelect = (selections: Selections) => void;
 export interface SelectoOptions {
   selectoOptions?: VueSelecto;
-  selectoStyles?: string;
   onSelect?: OnSelect;
 }
 
