@@ -1,23 +1,23 @@
 <template>
   <Selecto @select="onSelect" class="liner-group">
     <div class="liner-item">
-      <SelectoChart id="chart1" :options="options" :dataset="dataset1" class="line-chart" />
+      <SelectoChart id="chart1" :options="options" class="line-chart" />
     </div>
     <div class="liner-item">
-      <SelectoChart id="chart2" :options="options" :dataset="dataset1" class="line-chart" />
+      <SelectoChart id="chart2" :options="options" class="line-chart" />
     </div>
     <div class="liner-item">
-      <SelectoChart id="chart3" :options="options" :dataset="dataset1" class="line-chart" />
+      <SelectoChart id="chart3" :options="options" class="line-chart" />
     </div>
   </Selecto>
-
 </template>
 
 <script setup lang="ts">
 import { Selecto, SelectoChart } from '../../src/components/chart';
-import type { EChartsOption } from 'echarts';
 
 type SelectoProps = InstanceType<typeof Selecto>['$props'];
+
+type SelectoChartProps = InstanceType<typeof SelectoChart>['$props'];
 
 const dataset1 = {
   dimensions: ['product', '2015'],
@@ -47,7 +47,7 @@ const dataset1 = {
 
 const maxVal = Math.max(...dataset1.source.map(d => d['2015']));
 
-const options: EChartsOption = {
+const options: SelectoChartProps['options'] = {
   xAxis: {
     type: 'category',
     axisLine: {
@@ -139,6 +139,7 @@ const options: EChartsOption = {
     renderMode: 'html',
     appendToBody: true,
   },
+  dataset: dataset1
 }
 
 const onSelect: SelectoProps['onSelect'] = (e) => {

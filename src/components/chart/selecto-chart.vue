@@ -16,15 +16,15 @@ export type EchartOptions = Parameters<ECharts['setOption']>[0];
 
 export interface SelectoChartProps {
   id?: string;
-  options?: Omit<EchartOptions, 'dataset'>; // echarts options
+  options: Omit<EChartsOption, 'dataset'> & { dataset: ArrayItem<EChartsOption['dataset']> }; // echarts options
   initOptions?: Omit<Parameters<typeof initEchart>[2], 'renderer'>; // echarts init options
-  dataset?: ArrayItem<EChartsOption['dataset']>;
 }
 
 const getInstanceId = inject<GetInstanceId>('getInstanceId')!;
 const instanceId = shallowRef(getInstanceId());
 
-const { options = {}, initOptions = {}, dataset = {}, id: echartId = instanceId.value } = defineProps<SelectoChartProps>();
+const { options, initOptions = {}, id: echartId = instanceId.value } = defineProps<SelectoChartProps>();
+const { dataset } = options;
 
 const registerSelecto = inject<RegisterSelecto>('registerSelecto')!;
 const unregisterSelecto = inject<UnregisterSelecto>('unregisterSelecto')!;

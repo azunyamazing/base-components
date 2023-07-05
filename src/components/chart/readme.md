@@ -5,9 +5,9 @@
 
 <template>
   <Selecto @select="onSelect">
-    <SelectoChart id="c1" :dataset="dataset" :options="options" style="width: 600px; height: 350px" />
-    <SelectoChart id="c2" :dataset="dataset" :options="options" style="width: 600px; height: 350px" />
-    <SelectoChart id="c3" :dataset="dataset" :options="options" style="width: 600px; height: 350px" />
+    <SelectoChart id="c1" :options="options" style="width: 600px; height: 350px" />
+    <SelectoChart id="c2" :options="options" style="width: 600px; height: 350px" />
+    <SelectoChart id="c3" :options="options" style="width: 600px; height: 350px" />
   </Selecto>
 </template>
 
@@ -26,6 +26,7 @@ const dataset = {
 }
 
 const options = {
+  dataset,
   // ...
 }
 
