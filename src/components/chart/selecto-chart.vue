@@ -11,12 +11,15 @@ import type { ECharts, EChartsOption } from "echarts";
 import type { GetInstanceId, RegisterSelecto, UnregisterSelecto } from "./selecto.vue";
 
 export type ArrayItem<T> = T extends Array<infer E> ? E : never;
+export type OverrideType<T, Key, NewType> = {
+  [K in keyof T]: K extends Key ? NewType : T[K];
+};
+
 export type Coordinate = ArrayItem<Parameters<ECharts['convertToPixel']>[1]>;
-export type EchartOptions = Parameters<ECharts['setOption']>[0];
 
 export interface SelectoChartProps {
   id?: string;
-  options: Omit<EChartsOption, 'dataset'> & { dataset: ArrayItem<EChartsOption['dataset']> }; // echarts options
+  options: OverrideType<EChartsOption, 'dataset', ArrayItem<EChartsOption['dataset']>>; // echarts options
   initOptions?: Omit<Parameters<typeof initEchart>[2], 'renderer'>; // echarts init options
 }
 
