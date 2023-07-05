@@ -41,13 +41,16 @@ const { getId } = useId();
 
 // 坐标集合
 const dataCoordinateMap = computed(() => {
+  const coordinateMap = new Map<string, [[xName: string, xVal: string | number], [yName: string, yVal: string | number]]>();
+  if (!dataset) {
+    return coordinateMap;
+  }
+
   const { dimensions, source } = dataset;
   if (!dimensions || !source || !Array.isArray(source)) {
     console.error('[selecto chart]: make sure dataset has attrs: dimensions, source');
-    return;
+    return coordinateMap;
   }
-
-  const coordinateMap = new Map<string, [[xName: string, xVal: string | number], [yName: string, yVal: string | number]]>();
 
   // 收集每一点的值坐标
   // dimensions: 第一个是 x 轴 key, 后面是 y 轴 key
