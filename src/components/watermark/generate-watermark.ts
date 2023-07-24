@@ -6,7 +6,7 @@ export interface WatermarkConfig {
   text: string;
   fontSize?: string;
   fontFamily?: string;
-  fontWeight?: string;
+  fontWeight?: number | string;
   gapX?: number;
   gapY?: number;
   color?: string;
@@ -29,7 +29,7 @@ export const generateWatermark: GenerateWatermark = (target, config) => {
   }
 
   // 进行初始化属性配置操作
-  const completedConfig: GenerateWatermarkContainerConfig = Object.assign({
+  const completedConfig: GenerateWatermarkContainerConfig = {
     fontSize: '16px',
     fontFamily: 'Inter',
     fontWeight: 400,
@@ -37,8 +37,11 @@ export const generateWatermark: GenerateWatermark = (target, config) => {
     text: 'eriri',
     gapX: 0,
     gapY: 0,
-    position
-  }, config)
+    position,
+    className: '',
+    zIndex: 99999,
+    ...config
+  }
 
   let stop = noop;
 
@@ -74,17 +77,21 @@ export const generateWatermark: GenerateWatermark = (target, config) => {
   };
 }
 
-export type GenerateWatermarkContainerConfig = GenderateWatermarkConfig & {
+export type GenerateWatermarkContainerConfig = Required<GenderateWatermarkConfig> & {
   position: string;
 }
 
 // 生成水印元素
 export function generateWatermarkContainer(config: GenerateWatermarkContainerConfig): HTMLDivElement {
-  const { position, zIndex = 10000, className = '', ...watermarkConfig } = config;
+  const { position, zIndex, className, gapX, gapY, ...watermarkConfig } = config;
   const [textWidth, textHeight] = getTextSize(watermarkConfig.text, watermarkConfig.fontSize);
   const [imageWidth, imageHeight] = getImageSize(textWidth * 1.2, -45);
 
-  const watermarkImage = generateWatermarkImage({ ...watermarkConfig, textWidth, textHeight, imageWidth, imageHeight });
+  // 完整的背景大小还需要加上 gap 距离
+  const fullImageWidth = imageWidth + gapX;
+  const fullImageHeight = imageHeight + gapY;
+
+  const watermarkImage = generateWatermarkImage({ ...watermarkConfig, textWidth, textHeight, imageWidth: fullImageWidth, imageHeight: fullImageHeight });
   const container = document.createElement('div');
 
   className && container.classList.add(className);
@@ -99,7 +106,7 @@ export function generateWatermarkContainer(config: GenerateWatermarkContainerCon
     height: '100%',
     backgroundImage: `url(${watermarkImage})`,
     backgroundRepeat: 'repeat',
-    backgroundSize: `${imageWidth}px ${imageHeight}px`,
+    backgroundSize: `${fullImageWidth}px ${fullImageHeight}px`,
     zIndex,
     pointerEvents: 'none'
   });
@@ -108,7 +115,7 @@ export function generateWatermarkContainer(config: GenerateWatermarkContainerCon
 }
 
 // 生成水印图片配置
-export type GenerateWatermarkImageConfig = WatermarkConfig & {
+export type GenerateWatermarkImageConfig = Omit<Required<WatermarkConfig>, 'gapX' | 'gapY'> & {
   textWidth: number;
   textHeight: number;
   imageWidth: number;
@@ -116,11 +123,11 @@ export type GenerateWatermarkImageConfig = WatermarkConfig & {
 }
 
 export function generateWatermarkImage(config: GenerateWatermarkImageConfig) {
-  const { textHeight, imageWidth, imageHeight, fontSize, fontFamily, fontWeight, color, text, gapX, gapY } = config
+  const { textHeight, imageWidth, imageHeight, fontSize, fontFamily, fontWeight, color, text } = config
 
   const canvas = document.createElement('canvas');
-  canvas.width = imageWidth + textHeight + gapX;
-  canvas.height = imageHeight + textHeight + gapY;
+  canvas.width = imageWidth + textHeight;
+  canvas.height = imageHeight + textHeight;
 
   const ctx = canvas.getContext('2d');
   ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
