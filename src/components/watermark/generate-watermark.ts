@@ -1,16 +1,15 @@
 import { createMutationObserverHandler, noop } from "./observer";
+import { getImageSize, getTextSize } from "./size";
 
 // 单个水印配置
 export interface WatermarkConfig {
-  width: number;
-  height: number;
+  text: string;
   fontSize?: string;
   fontFamily?: string;
   fontWeight?: string;
   gapX?: number;
   gapY?: number;
   color?: string;
-  text?: string;
 }
 
 // 入口函数配置
@@ -29,10 +28,22 @@ export const generateWatermark: GenerateWatermark = (target, config) => {
     target.style.position = 'relative';
   }
 
+  // 进行初始化属性配置操作
+  const completedConfig: GenerateWatermarkContainerConfig = Object.assign({
+    fontSize: '16px',
+    fontFamily: 'Inter',
+    fontWeight: 400,
+    color: 'rgba(29, 33, 41, 0.07)',
+    text: 'eriri',
+    gapX: 0,
+    gapY: 0,
+    position
+  }, config)
+
   let stop = noop;
 
   const run = () => {
-    const element = generateWatermarkContainer({ ...config, position });
+    const element = generateWatermarkContainer(completedConfig);
     target.appendChild(element);
 
     stop = () => {
@@ -70,9 +81,10 @@ export type GenerateWatermarkContainerConfig = GenderateWatermarkConfig & {
 // 生成水印元素
 export function generateWatermarkContainer(config: GenerateWatermarkContainerConfig): HTMLDivElement {
   const { position, zIndex = 10000, className = '', ...watermarkConfig } = config;
-  const { width, height } = watermarkConfig;
+  const [textWidth, textHeight] = getTextSize(watermarkConfig.text, watermarkConfig.fontSize);
+  const [imageWidth, imageHeight] = getImageSize(textWidth * 1.2, -45);
 
-  const watermarkImage = generateWatermarkImage(watermarkConfig);
+  const watermarkImage = generateWatermarkImage({ ...watermarkConfig, textWidth, textHeight, imageWidth, imageHeight });
   const container = document.createElement('div');
 
   className && container.classList.add(className);
@@ -87,7 +99,7 @@ export function generateWatermarkContainer(config: GenerateWatermarkContainerCon
     height: '100%',
     backgroundImage: `url(${watermarkImage})`,
     backgroundRepeat: 'repeat',
-    backgroundSize: `${width}px ${height}px`,
+    backgroundSize: `${imageWidth}px ${imageHeight}px`,
     zIndex,
     pointerEvents: 'none'
   });
@@ -95,21 +107,28 @@ export function generateWatermarkContainer(config: GenerateWatermarkContainerCon
   return container;
 }
 
-// 生成水印图片
-export function generateWatermarkImage(config: WatermarkConfig) {
-  const { width, height, fontSize = '14px', fontFamily = 'Inter', fontWeight = 400, color = 'rgba(29, 33, 41, 0.07)', text = 'eriri', gapX = 0, gapY = 0 } = config
+// 生成水印图片配置
+export type GenerateWatermarkImageConfig = WatermarkConfig & {
+  textWidth: number;
+  textHeight: number;
+  imageWidth: number;
+  imageHeight: number;
+}
+
+export function generateWatermarkImage(config: GenerateWatermarkImageConfig) {
+  const { textHeight, imageWidth, imageHeight, fontSize, fontFamily, fontWeight, color, text, gapX, gapY } = config
 
   const canvas = document.createElement('canvas');
-  canvas.width = width + gapX;
-  canvas.height = height + gapY;
+  canvas.width = imageWidth + textHeight + gapX;
+  canvas.height = imageHeight + textHeight + gapY;
 
   const ctx = canvas.getContext('2d');
   ctx.font = `${fontWeight} ${fontSize} ${fontFamily}`;
   ctx.fillStyle = color;
 
-  ctx.translate(width / 10, height * 0.8);
-  ctx.rotate((-40 * Math.PI) / 180);
-  ctx.fillText(text, 0, 0);
+  ctx.translate(0, imageHeight);
+  ctx.rotate((-45 * Math.PI) / 180);
+  ctx.fillText(text, textHeight, textHeight);
 
   return canvas.toDataURL();
 }
