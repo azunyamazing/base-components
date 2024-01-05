@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react"
-import { generateWatermark, type GenderateWatermarkConfig } from "./generate-watermark";
+import { generateWatermark, type GenerateWatermarkConfig } from "./generate-watermark";
 
-export type WatermarkProps = GenderateWatermarkConfig & {
+export type WatermarkProps = GenerateWatermarkConfig & {
   children?: ReactNode;
 };
 
@@ -10,15 +10,14 @@ export const Watermark = (props: WatermarkProps) => {
 
   const ref = useRef<HTMLDivElement>();
 
-  const clickref = useRef<Function>()
+  const watermarkRef = useRef<Function>()
 
   useEffect(() => {
-    clickref.current = generateWatermark(ref.current, config)
-
+    watermarkRef.current = generateWatermark(ref.current, config)
   }, []);
 
   const onClick = () => {
-    clickref.current();
+    watermarkRef.current();
   }
 
   return (

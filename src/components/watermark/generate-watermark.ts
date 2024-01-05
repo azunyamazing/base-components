@@ -13,13 +13,13 @@ export interface WatermarkConfig {
 }
 
 // 入口函数配置
-export type GenderateWatermarkConfig = WatermarkConfig & {
+export type GenerateWatermarkConfig = WatermarkConfig & {
   className?: string;
   zIndex?: number;
 }
 
 export type WatermarkCleaner = () => void;
-export type GenerateWatermark = (target: HTMLElement, config: GenderateWatermarkConfig) => WatermarkCleaner;
+export type GenerateWatermark = (target: HTMLElement, config: GenerateWatermarkConfig) => WatermarkCleaner;
 
 // 生成水印入口函数
 export const generateWatermark: GenerateWatermark = (target, config) => {
@@ -77,7 +77,7 @@ export const generateWatermark: GenerateWatermark = (target, config) => {
   };
 }
 
-export type GenerateWatermarkContainerConfig = Required<GenderateWatermarkConfig> & {
+export type GenerateWatermarkContainerConfig = Required<GenerateWatermarkConfig> & {
   position: string;
 }
 
